@@ -1,0 +1,10 @@
+
+services:
+  vr-notify-bot:
+    image: suterdev/vr-notify-bot:latest
+    restart: always
+    environment:
+      DISCORD_BOT_TOKEN: "<token-here>"
+      DISCORD_GUILD_ID: "<token-here>"
+      DISCROD_VIDEO_CHANNEL_ID: ""
+      YOUTUBE_API_KEY: ""

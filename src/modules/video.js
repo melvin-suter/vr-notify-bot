@@ -1,4 +1,5 @@
 
+import { getVideoType } from './get-video-type.js';
 import { setTimestamps, getTimestamps } from './timestamps.js';
 import { parseStringPromise } from 'xml2js';
 
@@ -20,6 +21,7 @@ export const checkFullVideo = async (youtube, channel, channelID) => {
     const videoId = latestVideo['yt:videoId'][0];
     const videoTitle = latestVideo.title[0];
     const videoPublishedAt = new Date(latestVideo.published[0]).getTime();
+    const videoType = await getVideoType(videoId);
 
     if (
         !lastVideoTimestamps[channelID] ||

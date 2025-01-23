@@ -1,7 +1,6 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import { google } from 'googleapis';
-import { checkFullVideo } from './modules/video.js';
-import { checkLiveStream } from './modules/stream.js';
+import { checkFeed } from './lib/feed.js';
 
 
 // Discord bot setup
@@ -11,7 +10,6 @@ const client = new Client({
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY; // Replace with your YouTube Data API key
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN; // Replace with your Discord bot token
-const DISCROD_VIDEO_CHANNEL_ID = process.env.DISCROD_VIDEO_CHANNEL_ID; // Replace with the Discord channel ID where notifications will be sent
 const DISCORD_GUILD_ID = process.env.DISCORD_GUILD_ID; // Replace with the Discord channel ID where notifications will be sent
 const POLL_INTERVAL = 60000; // Check every minute
 
@@ -32,18 +30,12 @@ const youtube = google.youtube({
 
 async function runCicle() {
     const guild = client.guilds.cache.get(DISCORD_GUILD_ID);
-    const channel = guild.channels.cache.get(DISCROD_VIDEO_CHANNEL_ID);
-    if (!channel) {
-        console.log("channel not found");
-        return;
-    }
 
-    for (const channelId of YOUTUBE_CHANNEL_IDS) {
+    for (const channelID of YOUTUBE_CHANNEL_IDS) {
         try {
-            await checkFullVideo(youtube,channel, channelId);
-            //await checkLiveStream(youtube,channel, channelId);
+            await checkFeed(youtube,guild, channelID);
         } catch (error) {
-            console.error(`Error fetching videos for channel ${channelId}:`, error);
+            console.error(`Error fetching videos for channel ${channelID}:`, error);
         }
     }
 }
